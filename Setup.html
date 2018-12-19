@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+
+
+<style>
+
+.mindset-text {
+  background-color:#fff;
+  position: absolute;
+  right: -20px;
+  bottom: 0px;
+  max-width: 265px;
+  text-align: center;
+  padding-left: 0px;
+  padding-right: 0px;
+  font-size: 0.85em;
+}
+
+.mindset-logo {
+  width: 150px;
+  height: auto;
+  padding-top: 4px;
+  margin: 0 auto;
+}
+
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+</style>
+
+
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-129144133-2" type="text/javascript"></script>
+<script type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+</script>
+</head>
+
+<body>
+<!--<form onsubmit="determineNext()">-->
+<input type="hidden" id="activestep" value="connections"/>
+<input type="hidden" id="selectedService"/>
+<input type="hidden" id="selectedServiceID"/>
+<input type="hidden" id="selectedEntity"/>
+<input type="hidden" id="selectedMetadataUrl"/>
+<input type="hidden" id="originalSelectedServiceID"/>
+<input type="hidden" id="originalSelectedEntity"/>
+<input type="hidden" id="connectionIsActive" value="false"/>
+
+<div id="connections">
+<!--
+  <div id="connectionsSpinner" align="center">
+     <b>space this out a touch</b>
+     <img src="http://mindsetconsulting.com/img/loading-spinner.gif">
+  </div>
+ --> 
+  <div id="connectionsSpinner" class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+  <div id="connectionsContent" style="height:425px; overflow-y:auto" hidden>
+    <div style="border-bottom: 1px solid #dcdcdc;"><b>Select SAP Connection</b> 
+    (<a href="https://www.mindsetconsulting.com/cloud_simple.html#see-in-action" target="_blank">show me how!</a>) 
+    </div> <br/>
+    <div id="existingConnections">
+    </div>
+    <br/>
+    <div class="inline form-group">
+      <input type="text" id="newConnectionName" style="width: 80px;" placeholder="Name">
+    </div>
+    <div class="inline form-group">
+    <input type="text" id="newConnectionURL" style="width: 225px;" placeholder="Gateway URL">
+    </div>
+    <div class="inline form-group">
+      <button class="share" id="addConnection">Add Connection</button>
+    </div>
+    <br/><br/><br/>
+    <!--<hr style="background:#dcdcdc; border:0; height:1px" />-->
+    <div style="border-bottom: 1px solid #dcdcdc;"><b>Credentials For Selected Connection</b></div><br/>
+
+    <div class="inline form-group">
+      <label for="sapUserName">User name</label>
+      <input type="text" id="sapUserName" placeholder="SAP user name" style="width: 120px;">
+    </div>
+    <div class="inline form-group">
+      <label for="sapPassword">Password</label>
+      <input type="password" id="sapPassword" placeholder="SAP password" style="width: 120px;">
+    </div>
+    <div id="connectionError" hidden>
+      <b>Unable to connect to your SAP system.  Please check your connection settings.</b>
+    </div>
+    <div id="passwordError" hidden>
+      <b>Unable to log in to your SAP system.  Please check your user credentials.</b>
+    </div>
+  </div>
+</div>
+
+<div id="datasources" hidden>
+  <div style="border-bottom: 1px solid #dcdcdc;"><b>Select a Data Source</b>
+  </div>
+  <div id="datasourcesContent" style="height:375px; overflow-y:auto">
+    <!--<div id="dataSourcesSpinner" align="center">
+      <img src="http://mindsetconsulting.com/img/loading-spinner.gif">
+    </div>  -->
+  <div id="dataSourcesSpinner" class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>    
+    <br/>
+  </div>
+</div>
+
+<div id="objects" hidden>
+  <div style="border-bottom: 1px solid #dcdcdc;"><b>Select an Object</b>
+  </div>
+  <br/>
+  <div id="objectsContent" style="height:425px; overflow-y:auto">
+  </div>
+</div>
+
+
+<div class="bottom button-bar">
+  <button id="wizard-previous" disabled>Back</button>  
+  <button id="wizard-next" class="action">Continue</button>
+  <button id="wizard-done" class="action" hidden>Finish</button>
+</div>
+
+<div class="mindset-text">
+  This <a href="https://github.com/MindsetConsulting/OpenSourceCloudSimpleAddOn" target="_blank">open source</a> plug-in is provided by
+  <a href="https://www.mindsetconsulting.com/" target="_blank"><img src="https://www.mindsetconsulting.com/wp-content/uploads/2018/10/Mindset-Logotype.png"
+      class="mindset-logo" /></a>
+  <br /><a href="https://www.mindsetconsulting.com/" target="_blank">Click here</a> to check out our Fiori App
+  portfolio.
+</div>
+ 
+<!--</form>-->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+  <script>  
+
+  function closeModal(){
+    google.script.host.close();
+  }  
+  
+  $(document).keydown(function(e){
+    var step = document.getElementById("activestep").value;
+    var targetHtml = $(e.target).html();
+    var targetId = $(e.target).attr('id');
+    if(e.keyCode == 13 && step == 'connections'){
+      if(targetId == 'newConnectionName' || targetId == 'newConnectionURL'){
+        addConnectionToUi();
+      } else if(targetHtml != 'Add Connection'){
+        determineNext();
+      }
+    }
+  });
+  
+  $(function() {
+    loadClientId();
+    getConnections();
+    loadDataSourceSettings();
+    
+    $('#addConnection').click(function(){
+      addConnectionToUi();
+    });
+    
+    $('#wizard-previous').click(function(){
+      determinePrevious();
+    });
+    
+    $('#wizard-next').click(function(){  
+      determineNext();
+    });
+
+    $('#wizard-done').click(function(){
+      var setupData = {};
+      setupData.selectedService = $('#selectedService').val();
+      setupData.selectedServiceID = $('#selectedServiceID').val();
+      setupData.selectedEntity = $('#selectedEntity').val();
+      setupData.selectedMetadataUrl = $('#selectedMetadataUrl').val();
+      setupData.currentUser = $('#sapUserName').val().toUpperCase();
+      
+      var setupLog = 'SERVICE: ' + setupData.selectedService + ' ENTITY: ' + setupData.selectedEntity;
+    
+      $('[name="connectionDetails"]').each(function(){
+        if($(this).find('[name="radioConnection"]').is(':checked')){          
+          setupData.connectionName = $(this).find('[name="connectionName"]').html();
+        }
+      });  
+      
+      var deleteFilters;
+      
+      if($('#selectedServiceID').val() == $('#originalSelectedServiceID') && 
+            $('#selectedEntity').val() == $('#originalSelectedEntity').val()){
+         deleteFilters = false;
+      }else{
+        deleteFilters = true;
+      }
+      
+      
+      google.script.run  
+        .withSuccessHandler(closeModal)
+        .showSidebar(setupData, false, deleteFilters);      
+    });
+
+  });  
+
+  function loadClientId() {
+    google.script.run
+      .withSuccessHandler(loadGA)
+      .getClientId();
+  }
+
+  var ga_active = false;
+  function loadGA(clientData) {
+    if(clientData.ga_id != '') {
+      ga_active = true;
+    }
+    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+    if (dnt != "1" && dnt != "yes" && ga_active) {
+      gtag('js', new Date());
+
+      gtag('config', clientData.ga_id, { 
+        'page_title': 'Setup',
+        'page_location': clientData.ul,
+        'user_id': clientData.clientId
+      });
+    }
+  }
+  
+  function loadDataSourceSettings(){
+    google.script.run   
+      .withSuccessHandler(setDataSourceSettings)
+      .getDataSourceSettings();
+  } 
+  
+      
+  function setDataSourceSettings(dataSourceSettings){
+    $('#selectedService').val(dataSourceSettings.selectedService);
+    $('#selectedServiceID').val(dataSourceSettings.selectedServiceID);
+    $('#selectedEntity').val(dataSourceSettings.selectedEntity);
+    $('#selectedMetadataUrl').val(dataSourceSettings.selectedMetadataUrl);
+    $('#originalSelectedServiceID').val(dataSourceSettings.selectedServiceID);
+    $('#originalSelectedEntity').val(dataSourceSettings.selectedEntity);    
+  }        
+     
+  function closeModal(){
+    google.script.host.close();
+  }
+  
+  function escapeRegExp(string) {
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "");
+  }  
+  
+  function checkConnection(){
+    //Use this to check that the connection is working as specified by the user
+    google.script.run
+      .withFailureHandler(markConnectionFailed)
+      .withSuccessHandler(setupDataSourcesAndObjects)
+      .readAllServices();      
+  }
+  
+  function markConnectionFailed(error){
+    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+    if (dnt != "1" && dnt != "yes" && ga_active) {
+      gtag('event', 'connection-failure');
+    }
+    $('#connectionIsActive').val('false');
+    showConnectionsPane(true, error);
+    //$('#connectionError').show();
+  }
+  
+  function showEntities() {
+    var selectedService = $('input[name="ServiceSelect"]:checked').val();
+    var divToShow = selectedService + '_entities';   
+    $('#objectsContent').children().each(function(){      
+      if($(this).attr('name') == divToShow){
+        $(this).show();
+      }else{
+        $(this).hide();
+      }
+    });
+  }
+  
+  function setupDataSourcesAndObjects(serviceData){  
+    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+    if (dnt != "1" && dnt != "yes" && ga_active) {
+      gtag('event', 'connection-success');
+    }
+    
+    $('#connectionIsActive').val('true');    
+    var newHTML = '';
+    var newObjectHTML = '';
+    for(var i = 0; i < serviceData.d.results.length; i++){      
+      var service = serviceData.d.results[i];      
+      var serviceCleaned = escapeRegExp(service.ID);
+      var serviceTitleCleaned = escapeRegExp(service.Title);
+      newHTML += '<div name="' + serviceCleaned + '" title="service_select">';
+      newHTML +=   '<input type="radio" name="ServiceSelect" id="' + serviceCleaned + '" value="' + serviceCleaned + '" ';
+      
+      if($('#selectedServiceID').val() == '' && i == 0){  //PAUL
+        newHTML += 'checked';                             //PAUL
+      }                                                   //PAUL
+      
+      if($('#selectedServiceID').val() == serviceCleaned){
+        newHTML += 'checked';
+      }
+      newHTML += '>';
+      newHTML +=   '<label for="' + serviceCleaned + '" class="current"><b>' + service.Description + '</b></label><br/>';
+      //newHTML +=   '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="secondary">' + service.Title + '</span>';
+      newHTML += '</div>';
+      newObjectHTML += '<div name="' + serviceCleaned + '_entities' + '">';      
+      for(var j = 0; j < service.EntitySets.results.length; j++){
+        var entitySet = service.EntitySets.results[j];
+        var entityCleaned = escapeRegExp(entitySet.ID);
+        newObjectHTML +=   '<input type="radio" name="' + serviceTitleCleaned + '" id="' + serviceCleaned + entityCleaned + '" value="' + entityCleaned + '" ';
+        newObjectHTML +=   'selectedservice="' + service.Description + '" selectedentity="' + entitySet.Description + '" ';
+        newObjectHTML +=   'selectedserviceid="' + serviceCleaned + '" ';
+        newObjectHTML +=   'metadataurl="' + service.MetadataUrl + '" ';
+        if($('#selectedEntity').val() == entitySet.Description){
+          newObjectHTML += 'checked';
+        }
+        newObjectHTML += '/>';
+        newObjectHTML +=   '<label for="' + serviceCleaned + entityCleaned + '" class="current"><b>' + entitySet.Description + '</b></label><br/>';
+        //newObjectHTML +=   '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="secondary">' + entitySet.ID + '</span><br/>';      
+      }
+      newObjectHTML += '</div>';
+    }
+    $('#datasourcesContent').append(newHTML);
+    $('#objectsContent').empty();  //PAUL
+    $('#objectsContent').append(newObjectHTML);
+    $('#objectsContent').find('input').each(function(){
+      $(this).click(function(){
+        $('#selectedService').val($(this).attr('selectedservice'));
+        $('#selectedServiceID').val($(this).attr('selectedserviceid'));
+        $('#selectedEntity').val($(this).attr('selectedentity'));
+        $('#selectedMetadataUrl').val($(this).attr('metadataurl'));
+      });
+    });
+    
+    showDataSourcesPane();           
+  }
+  
+  function showDataSourcesPane(){
+    $('#dataSourcesSpinner').hide();      
+    $('#connections').hide();      
+    $('#datasources').show();        
+    $('#activestep').val('datasources');
+    $('#wizard-next').removeAttr('disabled');
+    $('#wizard-next').attr('class', 'action');
+    $('#wizard-previous').removeAttr('disabled');
+    //$('#wizard-done').attr('disabled', true);
+    $('#wizard-done').hide();
+  }
+  
+  function showConnectionsPane(showError, error){
+    if(showError){
+      if(error == 'password'){
+        $('#connectionError').hide();
+        $('#passwordError').show();
+      } else {
+        $('#connectionError').show();
+        $('#passwordError').hide();
+      }
+    }
+    $('#dataSourcesSpinner').hide();      
+    $('#connections').show();      
+    $('#datasources').hide();        
+    $('#activestep').val('connections');
+    $('#wizard-next').removeAttr('disabled'); //PAUL
+    $('#wizard-previous').attr('disabled', true); //PAUL
+    //$('#wizard-done').attr('disabled', true);     //PAUL
+    $('#wizard-done').hide();
+  }
+  
+  function addConnectionsToProperties(){
+    var connections = [];
+    $('[name="connectionDetails"]').each(function(){
+      var connection = {};
+      connection.name = $(this).find('[name="connectionName"]').html();
+      connection.url = $(this).find('[name="connectionURL"]').html();
+      if($(this).find('[name="radioConnection"]').is(':checked')){
+        connection.active = true;
+        connection.sapUserName = $('#sapUserName').val();
+        connection.sapPassword = $('#sapPassword').val();
+      }else{
+        connection.active = false;
+      }
+      connections.push(connection);
+
+    });
+    return connections;    
+
+  }
+  
+  function addConnectionToUi(){
+    if($('#newConnectionName').val() == '' || $('#newConnectionURL').val() == ''){
+      return;
+    }      
+    var newHTML = '';
+    newHTML += '<div name="connectionDetails">';
+    newHTML +=   '<div class="inline form-group">';
+    newHTML +=     '<input type="radio" name="radioConnection" ';
+    if($('[name="radioConnection"]:checked').length == 0){
+      newHTML += 'checked';
+    }
+    newHTML += '/>';
+    newHTML +=   '</div>';
+    //newHTML +=   '<div class="inline form-group"><a href="#" name="connectionDelete">Delete</a></div>';
+    newHTML +=   '<div class="inline form-group">';
+  newHTML +=     '<span name="connectionName" class="current">' + $('#newConnectionName').val() + '</span>';
+    newHTML +=   '</div>';
+    newHTML +=   '<div class="inline form-group">';
+  newHTML +=     '<span name="connectionURL" class="current">' + $('#newConnectionURL').val() + '</span>';
+    newHTML +=   '</div>';
+    newHTML +=   '<div class="inline form-group"><a href="#" name="connectionDelete">Delete</a></div><br/>';
+    newHTML += '</div>';
+    $('#existingConnections').append(newHTML);
+    $('#newConnectionName').val('');
+    $('#newConnectionURL').val('');
+    $('#existingConnections').find('[name="connectionDelete"]').each(function() {
+      $(this).click(function() {
+        $(this).closest('[name="connectionDetails"]').remove();
+        determineNextButton();
+      });
+    }); 
+    determineNextButton();    
+  }
+  
+  function getConnections(){
+    google.script.run
+      .withFailureHandler(closeConnectionsSpinner)
+      .withSuccessHandler(fillConnections)
+      .getConnections();
+  }
+  
+  function closeConnectionsSpinner(){
+    $('#connectionsSpinner').hide();
+    $('#connectionsContent').show();
+    $('#wizard-next').attr('disabled', true);
+  }
+  
+  function fillConnections(data){
+    //console.log('Connections came back as: ' + JSON.stringify(data));
+    if(data == undefined){ 
+      $('#connectionsSpinner').hide();
+      $('#connectionsContent').show();
+      $('#wizard-next').attr('disabled', true);
+      return; 
+    }
+    
+    if(data.connections.length < 1){
+      $('#wizard-next').attr('disabled', true);
+    }
+    
+    var newHTML = '';
+    for(var i = 0; i < data.connections.length; i++){
+      newHTML += '<div name="connectionDetails">';
+      newHTML +=   '<div class="inline form-group">';
+      newHTML +=     '<input type="radio" name="radioConnection" ';
+      if(data.connections[i].active){
+        newHTML += 'checked/>';
+        $('#sapUserName').val(data.connections[i].sapUserName);
+        $('#sapPassword').val(data.connections[i].sapPassword);
+      }else{
+        newHTML += '/>';
+      }
+      newHTML +=   '</div>';      
+      //newHTML +=   '<div class="inline form-group"><a href="#" name="connectionDelete">Delete</a></div>';
+      newHTML +=   '<div class="inline form-group">';
+    newHTML +=     '<span name="connectionName" class="current">' + data.connections[i].name + '</span>';
+      newHTML +=   '</div>';
+      newHTML +=   '<div class="inline form-group">';
+    newHTML +=     '<span name="connectionURL" class="current">' + data.connections[i].url + '</span>';
+      newHTML +=   '</div>';
+      newHTML +=   '<div class="inline form-group"><a href="#" name="connectionDelete">Delete</a></div><br/>';
+      newHTML += '</div>';
+    }
+    $('#existingConnections').append(newHTML);    
+    $('#existingConnections').find('[name="connectionDelete"]').each(function() {
+      $(this).click(function() {
+        $(this).closest('[name="connectionDetails"]').remove();
+      });
+    }); 
+    $('#connectionsSpinner').hide();
+    $('#connectionsContent').show();
+  }
+  
+  function determinePrevious(){
+    var step = document.getElementById("activestep").value;
+    if(step == "connections"){
+      //do nothing, you can't go further back than this step
+    }else if(step == "datasources"){
+      $('#datasources').hide();    
+      $('#connections').show();      
+      $('#activestep').val('connections');
+      //$('#wizard-next').removeAttr('disabled');      
+      determineNextButton();
+      $('#wizard-next').attr('class', 'action');
+      $('#wizard-previous').attr('disabled', true);
+      //$('#wizard-done').attr('disabled', true); //PAUL
+      $('#wizard-done').hide();
+    }else if(step == "objects"){
+      $('#objects').hide();        
+      $('#datasources').show();          
+      $('#activestep').val('datasources');
+      $('#wizard-next').removeAttr('disabled');
+      $('#wizard-next').attr('class', 'action');  //PAUL
+      $('#wizard-previous').removeAttr('disabled');
+      //$('#wizard-done').attr('disabled', true); //PAUL
+      $('#wizard-done').hide();
+    }
+  }
+  
+  //this should have the effect that if no connections are selected you don't see
+  //the 'next' button.
+  function determineNextButton(){
+    var makeItDisabled = true;
+    if($('#activestep').val() != 'objects'){
+      $('[name="connectionDetails"]').each(function(){
+        if($(this).find('[name="radioConnection"]').is(':checked')){            
+          makeItDisabled = false;
+        }
+      });     
+    }    
+    $('#wizard-next').attr('disabled', makeItDisabled);
+  }
+  
+  function establishConnection(connections){
+    google.script.run  
+      .withSuccessHandler(checkConnection)    
+      .saveConnections(connections);  
+  }
+  
+  function showDataSources(){
+    $('#datasources').show();
+  }
+  
+  function determineNext(){
+    var step = document.getElementById("activestep").value;
+    if(step == "connections"){   
+      $('#connectionError').hide();
+      showDataSources();      
+      $('#dataSourcesSpinner').show();      
+      $('#connections').hide();
+      $('div[title="service_select"]').remove();
+      var connections = addConnectionsToProperties();
+      establishConnection(connections);
+
+    }else if(step == "datasources"){
+      $('#datasources').hide();  
+      showEntities();    
+      $('#objects').show(); 
+      $('#activestep').val('objects');
+      $('#wizard-next').attr('disabled', true);
+      $('#wizard-next').removeAttr('class'); //PAUL
+      $('#wizard-previous').removeAttr('disabled');      
+      //$('#wizard-done').removeAttr('disabled');  //PAUL
+      $('#wizard-done').show();
+    }else if(step == "objects"){
+      //do nothing, you can't go further forward than this step      
+    }
+  }
+  
+  </script>
+  </body>
+  </html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons.css" rel=
+    "stylesheet">
+    <!-- The CSS package above applies Google styling to buttons and other elements. -->
+
+    <style>
+    
+.branding-below {
+    bottom:56px;
+    top:0
+}
+
+.branding-text {
+    left:7px;
+    position:relative;
+    top:3px
+}
+
+.col-contain {
+    overflow:hidden
+}
+
+.col-one {
+    float:left;
+    width:50%
+}
+
+.logo {
+    vertical-align:middle
+}
+
+.radio-spacer {
+    height:20px
+}
+
+.width-100 {
+    width:100%
+}
+
+* {
+    box-sizing:border-box
+}
+
+.action-pane {
+    background-color:#f5f5f5;
+    position:absolute;
+    padding:12px 0;
+    height:60px;
+    width:100%;
+    bottom:0;
+    border-top:1px solid #dcdcdc
+}
+
+.button-bar {
+    width:100%;
+    /*margin:12px 0*/
+}
+
+.button-bar ul {
+    display:table;
+    width:100%;
+    padding:0 12px;
+    margin:0;
+    list-style:none
+}
+
+.button-bar ul li {
+    display:table-cell;
+    float:none;
+    width:33.33333%;
+    padding:0;
+    text-align:center
+}
+
+.field-wrapper {
+    margin-bottom:18px
+}
+
+hr {
+    border:0;
+    border-top:1px solid #e7e7e7;
+    margin:20px -15px 15px
+}
+
+.messages {
+    
+    padding:12px;
+    position:absolute;
+    bottom:60px;
+    height:60px;
+    width:100%;
+    border-top:1px solid #dcdcdc;
+}
+
+.header-pane {
+    position:absolute;
+    top:0;
+    width:100%;
+    padding:15px 12px;
+    border-bottom:1px solid #dcdcdc;
+    background-color:#fff;
+    height:60px
+}
+
+ul.tab-bar {
+    display:table;
+    width:100%;
+    padding:0;
+    margin:0
+}
+
+ul.tab-bar li {
+    display:table-cell;
+    float:none;
+    width:33.333333%
+}
+
+.tab-bar li .button-tab {
+    width:100%;
+    text-align:center;
+    display:block;
+    padding:5px 0 4px;
+    border-left-width:0
+}
+
+a.button-tab {
+    border:1px solid #dcdcdc;
+    color:#333;
+    font-weight:700
+}
+
+.tab-bar li:first-child a.button-tab {
+    border-radius:2px 0 0 2px;
+    border-left-width:1px
+}
+
+.tab-bar li:last-child a.button-tab {
+    border-radius:0 2px 2px 0
+}
+
+.content-pane {
+    position:absolute;
+    top:60px;
+    bottom:122px;
+    width:100%;
+    overflow-x:hidden;
+    overflow-y:auto;
+    padding:16px 12px
+}
+
+.tab-bar li.selected .button-tab, .tab-bar li.selected .button-tab:hover, .tab-bar li.selected .button-tab:focus, .tab-bar li.selected .button-tab:active {
+    background: -moz-linear-gradient(top , #f5f5f5 , #f1f1f1);
+    background: -ms-linear-gradient(top , #f5f5f5 , #f1f1f1);
+    background: -o-linear-gradient(top , #f5f5f5 , #f1f1f1);
+    background: -webkit-linear-gradient(top , #f5f5f5 , #f1f1f1);
+    background: linear-gradient(top , #f5f5f5 , #f1f1f1);
+}
+
+.dialog-actions{
+    position:absolute;
+    width:100%;
+    bottom:0px;
+    height:60px;
+    border-top:1px solid #dcdcdc;
+    padding-top:12px;
+}
+
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+    </style>
+
+    <title>
+    </title>
+</head>
+
+<body>
+<input type="hidden" id="filter_id">
+<div id="filtersError" hidden>
+  <b>No filters are enabled for this data source in SAP Gateway.</b>
+</div>
+
+<div id="filtersContent">
+  <!--<div id="filtersSpinner" align="center">
+    <img src="http://mindsetconsulting.com/img/loading-spinner.gif">
+  </div>-->
+  <div id="filtersSpinner" class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>  
+
+  <div id="editFilterForm" hidden>
+    <div class="block form-group" id="filterfield">
+      <label for="select">Field</label>
+      <select id="select">
+      </select>    
+    </div>
+    <Br>
+    <div>
+      <input type="radio" name="radio-a" id="eq">
+      <label for="radio1">Equals (EQ)</label>
+    </div>
+    <div>
+      <input type="radio" name="radio-a" id="ne">
+      <label for="radio2">Does Not Equal (NE)</label>
+    </div>
+    <div>
+      <input type="radio" name="radio-a" id="gt">
+      <label for="radio3">Greater Than (GT)</label>
+    </div>
+    <div>
+      <input type="radio" name="radio-a" id="ge">
+      <label for="radio4">Greater Than or Equal To (GE)</label>
+    </div>
+    <div>
+      <input type="radio" name="radio-a" id="lt">
+      <label for="radio4">Less Than (LT)</label>
+    </div>
+    <div>
+      <input type="radio" name="radio-a" id="le">
+      <label for="radio4">Less Than or Equal To (LE)</label>
+    </div>
+    <div>
+      <input type="radio" name="radio-a" id="in">
+      <label for="radio4">Included In (IN) - Comma Separated List</label>      
+    </div>
+    <br>
+    <div class="inline form-group">
+      <label for="filter_value">Value</label>
+      <input type="text" id="filter_value" style="width: 200px;">
+      <span class="secondary" id="dateHelp" hidden>Dates must be in YYYY-MM-DD format.</span>
+    </div>
+    <div id="valueError" hidden>
+      <b>A filter requires a value.</b>
+    </div>
+    <div id="dateError" hidden>
+      <b>Dates must be in YYYY-MM-DD format.</b>
+    </div>
+    <div id="filterSaveError" hidden>
+      <b>Unable to save this filter. Please try again later.</b>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="action" type="button" id="saveFilter">Save</button>
+      <button type="button" id="cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+      
+      $(document).ready(function(){ 
+      
+       getEditFilterData();
+        
+       // start with filters tab
+       $('#filters_tab').show();
+      
+       // set tabs in action
+       $('.tab-bar a').click(function(){
+           $('.tab-bar li').removeClass("selected"); // clear selected class
+           $(this).parent().addClass("selected"); // add selected to the clicked item
+           
+           // hide all tabs
+           $('.tab').hide();
+           
+           // show the selected tab
+           var clickedId = $(this).attr('id');
+           var tabText = clickedId.substr(0,clickedId.length - 7); // take the _button off 
+           $("#" + tabText).show();
+           
+       });
+       
+       $('#saveFilter').click(function(){
+         var filter = {};
+         filter.id = $('#filter_id').val();
+         filter.type = $('input[name=radio-a]:checked').attr('id');
+         filter.edmType = $('#select option:selected').attr('edmtype');
+         filter.name = $('#select').val();
+         filter.description = $('#select option:selected').html();
+         filter.value = $('#filter_value').val(); 
+         if(filter.value != ''){
+           if(isValidDate()){
+             google.script.run
+               .withFailureHandler(showFilterSaveError)
+               .withSuccessHandler(reloadSidebar)
+               .addTempFilter(filter);
+           } else {
+             $('#dateHelp').css("font-weight", "bold");
+           }
+         }else{
+           $('#valueError').show();
+         }
+       });       
+       
+       $('#cancel').click(function(){
+         closeModal();
+       });
+       
+      });
+      
+      function getEditFilterData(){
+        google.script.run
+          .withSuccessHandler(fillEditFilterData)
+          .getEditFilterData();
+      }
+      
+      function fillEditFilterData(filter){ 
+        showFilterableFields(filter);
+        $('#filter_id').val(filter.id);
+        //$('#filterfield').html('Field: ' + filter.name);
+        $('#' + filter.type).prop('checked', true);
+        $('#filter_value').val(filter.value);
+        $('#filtersSpinner').hide();
+        $('#editFilterForm').show();
+      }
+      
+      function showFilterableFields(filter){
+        google.script.run
+          .withSuccessHandler(fillFieldSelect)
+          .withUserObject(filter)
+          .getFields();
+      }
+      
+      function fillFieldSelect(fieldSet, filter){
+        var newHTML = '';
+        var hasAnyFilters = false;
+        for(var i = 0; i < fieldSet.fields.length; i++){  
+          var field = fieldSet.fields[i];
+          var selectedValue = '';
+          if(field.filterable == undefined){ 
+            if(field.Name == filter.name){ selectedValue = 'selected'; }
+            newHTML += '<option name="filterFieldOption" value="' + field.Name + '"';
+            newHTML += ' edmtype="' + field.Type + '" ' + selectedValue + '>' + field.label + '</option>';
+            hasAnyFilters = true;
+          }
+        }
+        $('#filtersSpinner').hide();
+        
+        $('#select').change(function (){
+          setDateInfo();
+        });
+        
+        if(hasAnyFilters){
+          $('#select').append(newHTML);
+          $('#editFilterForm').show(); 
+          setDateInfo();
+        }else{
+          $('#filtersError').show();
+        }
+      }      
+      
+      function setDateInfo(){
+        var selectedType = $('#select option:selected').attr('edmtype');
+        if(selectedType.lastIndexOf('DateTime') > 0){    
+          $('#dateHelp').show();
+        } else {
+          $('#dateHelp').hide();
+        }
+      }
+      
+      function showFilterSaveError(){
+        $('#filterSaveError').show();
+      }
+      
+      function reloadSidebar(){
+        var setupData = {};
+        google.script.run
+          .withSuccessHandler(closeModal)
+          .showSidebar(setupData, true);
+      }
+      
+      function closeModal(){
+        google.script.host.close();
+      }
+      
+      function isValidDate(){
+        var selectedType = $('#select option:selected').attr('edmtype');
+
+        if(selectedType.lastIndexOf('DateTime') > 0){
+          var re = /^\d{4}-\d{1,2}-\d{1,2}$/;
+          return re.test($('#filter_value').val());          
+        } else {
+          return true;
+        }
+        
+      }
+      
+      
+    </script>
+</body>
+</html>

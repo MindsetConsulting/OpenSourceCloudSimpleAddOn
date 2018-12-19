@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+<style>
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  font-size: 10px;
+  
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+/**
+ * Message box styles
+ */
+.error_msg, .success_msg, .info_msg, .warning_msg {
+  display: block;
+  height: auto;
+  margin: 0px;
+  margin-top: 20px;
+  font: bold 13px Arial, sans-serif;
+  padding: 7px 4px 5px 4px;
+}
+
+.error_msg {
+  border:solid 1px #FFCACA;
+  background: #FFE4E4;
+  color: #aa0009;
+}
+
+.success_msg {
+  border: solid 1px #B6DB49;
+  background: #E2F0B6;
+  color: #007100;
+}
+
+.sucess_txt {
+  color: #007100;
+}
+
+.info_msg {
+  border:solid 1px #46B6EC;
+  background:#BDE5F8;
+  color: #004b8d;
+}
+
+.warning_msg {
+  border:solid 1px #FFD060;
+  background:#FFECC0;
+  color: #9F6000;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+#loading-view {
+  display:block;
+  margin:auto;
+  background:rgba(255,255,255,0.65);
+  position:absolute; 
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index: 1000;
+}
+
+.select-label {
+  display:inline-block;
+  width:135px;
+  margin-top:5px;
+}
+
+.select-field {
+  width:135px;
+  float: right;
+}
+
+.select-row {
+  height:45px;
+}
+
+.text-area {
+  width: 100%;
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading-view">
+  <div id="loading-spinner" class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+</div>
+  
+  <div id="repeatcontent" style="height:325px; overflow-y:auto" hidden>
+    <div style="border-bottom: 1px solid #dcdcdc;"><b>Schedule</b></div><br/>
+    
+    <div id="repeattype" class="select-row">
+        <label for="selectRepeat" class="select-label">Run report</label>
+        <select id="selectRepeat" name="selectRepeat" class="select-field">
+          <option value="HOURLY">Hourly</option>
+          <option value="DAILY" selected="selected">Daily</option>
+          <option value="WEEKLY">Weekly</option>
+          <option value="MONTHLY">Monthly</option>
+        </select>
+        <br/><br/>
+    </div>
+    
+    <div id="repeathour" class="select-row" hidden>
+        <label for="selectRepeatHour" class="select-label">Repeat every</label>
+        <select id="selectRepeatHour" name="selectRepeatHour" class="select-field">
+          <option value="1">Hour</option>
+          <option value="2">2 hours</option>
+          <option value="3">3 hours</option>
+          <option value="4">4 hours</option>
+          <option value="5">5 hours</option>
+          <option value="6">6 hours</option>
+          <option value="7">7 hours</option>
+          <option value="8">8 hours</option>
+          <option value="9">9 hours</option>
+          <option value="10">10 hours</option>
+          <option value="11">11 hours</option>
+          <option value="12">12 hours</option>
+          <option value="13">13 hours</option>
+          <option value="14">14 hours</option>
+          <option value="15">15 hours</option>
+          <option value="16">16 hours</option>
+          <option value="17">17 hours</option>
+          <option value="18">18 hours</option>
+          <option value="19">19 hours</option>
+          <option value="20">20 hours</option>
+          <option value="21">21 hours</option>
+          <option value="22">22 hours</option>
+          <option value="23">23 hours</option> 
+        </select>
+        <br/><br/>
+    </div>
+    
+    <div id="repeatweekday" class="select-row" hidden>
+        <label for="selectRepeatWeekday" class="select-label">Run on</label>
+        <select id="selectRepeatWeekday" name="selectRepeatWeekday" class="select-field">
+          <option value="SUNDAY">Sundays</option>
+          <option value="MONDAY">Mondays</option>
+          <option value="TUESDAY">Tuesdays</option>
+          <option value="WEDNESDAY">Wednesdays</option>
+          <option value="THURSDAY">Thursdays</option>
+          <option value="FRIDAY">Fridays</option>
+          <option value="SATURDAY">Saturdays</option>
+        </select>
+        <br/><br/>
+    </div>
+    
+    <div id="repeatdayofmonth" class="select-row" hidden>
+        <label for="selectRepeatDayOfMonth" class="select-label">Run on (calendar day)</label>
+        <select id="selectRepeatDayOfMonth" name="selectRepeatDayOfMonth" class="select-field">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option> 
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option> 
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option> 
+          <option value="30">30</option>
+          <option value="31">31</option>           
+        </select>
+        <br/><br/>
+    </div>
+    
+    <div id="repeathourspan" class="select-row">
+        <label for="selectRepeatHourSpan" class="select-label">Sometime between</label>
+        <select id="selectRepeatHourSpan" name="selectRepeatHourSpan" class="select-field">
+          <option value="0">Midnight and 1am</option>
+          <option value="1">1am and 2am</option>
+          <option value="2">2am and 3am</option>
+          <option value="3">3am and 4am</option>
+          <option value="4">4am and 5am</option>
+          <option value="5">5am and 6am</option>
+          <option value="6">6am and 7am</option>
+          <option value="7">7am and 8am</option>
+          <option value="8">8am and 9am</option>
+          <option value="9">9am and 10am</option>
+          <option value="10">10am and 11am</option>
+          <option value="11">11am and noon</option>
+          <option value="12">Noon and 1pm</option>
+          <option value="13">1pm and 2pm</option>
+          <option value="14">2pm and 3pm</option>
+          <option value="15">3pm and 4pm</option>
+          <option value="16">4pm and 5pm</option>
+          <option value="17">5pm and 6pm</option>
+          <option value="18">6pm and 7pm</option>
+          <option value="19">7pm and 8pm</option>
+          <option value="20">8pm and 9pm</option>
+          <option value="21">9pm and 10pm</option>
+          <option value="22">10pm and 11pm</option>
+          <option value="23">11pm and midnight</option>
+        </select>
+        <br/><br/>
+    </div>
+    <div>
+      <input type="checkbox" id="createNewSheetCheckbox"> Create new sheet (tab) each time the report is run.<br>
+      <br/><br/>
+    </div>
+    <div id="errorMessage" class="error_msg" hidden>
+      <b>Error: Unable to connect to your SAP system.</b>
+    </div>
+    <div id="limitWarning" class="warning_msg" hidden>
+      <b>Warning: You will quickly reach your tab limit with these settings.</b>
+    </div>
+  </div>
+  
+  <div id="notificationcontent" hidden>
+    <div style="border-bottom: 1px solid #dcdcdc;"><b>Message</b></div>
+    <p>This will be sent out each time the report is run.</p>
+    <textarea id="recipients" class="text-area" rows="1" placeholder="Distribution email addresses, comma-separated"></textarea><br><br>
+    <textarea id="messagesubject" class="text-area" rows="1" placeholder="Message subject"></textarea><br><br>
+    <textarea id="message" rows="10" class="text-area" placeholder="Message to recipients"></textarea>
+  </div>
+
+  <div class="bottom button-bar">
+    <button id="wizard-previous" disabled>Back</button>  
+    <button id="wizard-next" class="action">Continue</button>
+    <button id="wizard-done" class="action" hidden>Finish</button>
+  </div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+  <script>  
+  $(function() {
+    $('#repeatcontent').show();
+    $('#limitWarning').hide();
+    $('#errorMessage').hide();
+    
+    $('#wizard-next').click(function() {
+      $('#wizard-previous').removeAttr('disabled');
+      $('#wizard-next').attr('disabled', true);
+      $('#wizard-next').removeAttr('class');
+      $('#wizard-done').show();
+      $('#repeatcontent').hide();
+      $('#notificationcontent').show(); 
+    });
+    
+    $('#wizard-previous').click(function() {
+      $('#wizard-previous').attr('disabled', true);
+      $('#wizard-next').removeAttr('disabled');
+      $('#wizard-next').attr('class', 'action');
+      $('#wizard-done').hide();
+      $('#notificationcontent').hide();
+      $('#repeatcontent').show();
+    });
+    
+    $('#selectRepeat').change(function(e){
+      updateUI(this.value);
+    });
+    
+    $('#createNewSheetCheckbox').change(function() {
+        if($(this).is(":checked") && $('#repeathour').is(":visible") && $('#selectRepeatHour').val() < 12) {
+          $('#limitWarning').show();  
+        } else {
+          $('#limitWarning').hide();
+        }
+    });
+    
+    $('#selectRepeatHour').change(function() {
+      updateUI($('#selectRepeat').val());
+    });
+
+    $('#wizard-done').click(function(){
+      console.log('starting the finish process');
+      var scheduleData = {};
+      scheduleData.type = $('#selectRepeat').val();
+      scheduleData.repeatEveryHours = $('#selectRepeatHour').val();
+      scheduleData.hourSpan = $('#selectRepeatHourSpan').val();
+      scheduleData.repeatDay = $('#selectRepeatWeekday').val();
+      scheduleData.repeatDayOfMonth = $('#selectRepeatDayOfMonth').val();
+      scheduleData.distributionList = $('#recipients').val();
+      scheduleData.messageSubject = $('#messagesubject').val();
+      scheduleData.message = $('#message').val();
+      scheduleData.newSheet = $('#createNewSheetCheckbox').is(':checked')
+      
+      console.log('calling sheet backend');
+      google.script.run
+        .withSuccessHandler(exitScheduleUi)
+        .createSchedule(scheduleData);
+    });
+    
+    getTriggerProperties();
+    
+  });  
+  
+  
+  function updateUI(value) {
+    $('#repeathour').hide();
+    $('#repeathourspan').hide();
+    $('#repeatweekday').hide();
+    $('#repeatdayofmonth').hide();
+    $('#limitWarning').hide();
+    $('#errorMessage').hide();
+    switch(value){
+      case 'HOURLY':
+        $('#repeathour').show();
+        if($('#createNewSheetCheckbox').is(":checked") && $('#selectRepeatHour').val() < 12) {
+          $('#limitWarning').show();  
+        }
+        break;
+      case 'DAILY':
+        $('#repeathourspan').show();
+        break;
+      case 'WEEKLY':
+        $('#repeathourspan').show();
+        $('#repeatweekday').show();
+        break;
+      case 'MONTHLY':
+        $('#repeathourspan').show();
+        $('#repeatdayofmonth').show();
+        break;
+    }
+  }
+  
+  function getTriggerProperties() {
+    google.script.run
+      .withFailureHandler(getTriggerFailed)
+      .withSuccessHandler(getTriggerSuccess)
+      .getTriggerProperties();
+  }
+  
+  function getTriggerFailed() {
+    $('#loading-view').hide();
+    $('#errorMessage').show();
+  }
+  
+  /**
+   * First, check to see if a schedule exists and that the logged in user is the author.
+   *
+   */
+  function getTriggerSuccess(data) {
+    if(data) {
+      var triggerProperties = JSON.parse(data);
+      if(triggerProperties.creator) {
+        // User is trigger author, load existing schedule data
+        loadScheduleData();
+      } else {
+        $('#loading-view').hide();
+      }
+    } else {
+      // No existing data to load
+      $('#loading-view').hide();
+    }
+  }
+  
+  /**
+   * Load existing schedule data to use for populating the form.
+   *
+   */
+  function loadScheduleData() {
+    google.script.run
+      .withFailureHandler(getScheduleFailed)
+      .withSuccessHandler(getSchdeuleSuccess)
+      .getScheduleData();
+  }
+  
+  function getScheduleFailed() {
+    $('#loading-view').hide();
+    $('#errorMessage').show();
+  }
+  
+  function getSchdeuleSuccess(data) {
+    if(data) {
+      var scheduleData = JSON.parse(data);
+      $('#selectRepeat').val(scheduleData.type);
+      updateUI(scheduleData.type);
+      $('#selectRepeatHour').val(scheduleData.repeatEveryHours);
+      $('#selectRepeatHourSpan').val(scheduleData.hourSpan);
+      $('#selectRepeatWeekday').val(scheduleData.repeatDay);
+      $('#selectRepeatDayOfMonth').val(scheduleData.repeatDayOfMonth);
+      $('#recipients').val(scheduleData.distributionList);
+      $('#messagesubject').val(scheduleData.messageSubject);
+      $('#message').val(scheduleData.message);
+
+      if(scheduleData.newSheet) {
+        $('#createNewSheetCheckbox').prop('checked', true);
+      } else {
+        $('#createNewSheetCheckbox').prop('checked', false);
+      }
+    }
+    $('#loading-view').hide();
+  }
+  
+  function exitScheduleUi(){
+    console.log('attempting to close the thing');
+    google.script.host.close();
+  }
+  
+  </script>
+  </body>
+  </html>
