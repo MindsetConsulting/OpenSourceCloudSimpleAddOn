@@ -46,7 +46,7 @@ function readAllServices() {
     return jsonObj;
   }catch (error){
     quickLog('An error occurred establishing the connection: ' + error.message);
-    logError('readAllServices() ' + error.message);
+  //  logError('readAllServices() ' + error.message);
     if(error.message.indexOf("<title>Logon Error Message</title>") > -1){
       throw 'password';
     } else {
@@ -413,7 +413,7 @@ function getEntityFields(metadataURL, entitySetName) {
     }
   }catch(err){
     quickLog('Error getting entity fields: ' + err.message);
-    logError('getEntityFields() ' + err.message);
+    //logError('getEntityFields() ' + err.message);
     //If the response contains a logon error, pop the user back to the setup screen
     if(err.message.lastIndexOf('Logon Error Message') > -1){
       var ui = SpreadsheetApp.getUi();

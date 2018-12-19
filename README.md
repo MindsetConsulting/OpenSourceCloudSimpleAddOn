@@ -1,18 +1,15 @@
-# CloudShuttle
+# CloudSimple is now Free!
 
-CloudShuttle source - google scripts, html/js/css
+After several years of development, we decided to make CloudSimple Free and Open Source.
 
-## Demo Credentials
+At Mindset, we've been hyper-focused on building Fiori apps and SAP Design Thinking in our AppHaus, so haven't had a lot of time to focus on this project.
 
-- Connection name: `DEMO`
-- Gateway URL: `https://demo1.mindsetconsulting.com`
-- Username: `cs_demo`
-- Password: `DemoPass!@#$`
+We hope you enjoy it!
 
-### Datasource
+Here is a link if you forgot it:
 
-- `Demo Services for CloudSimple (v2)`
+https://chrome.google.com/webstore/detail/cloudsimple/loggpphobmmoingcdnliadpoogfanmbf?utm_source=permalink
 
-### Object
+## Demo Server
 
-- `BusinessPartnerSet`
+Feel free to contact NaveenRokkam@mindsetconsulting.com for Demo Server credentials
